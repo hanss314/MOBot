@@ -94,6 +94,18 @@ class Core:
 
         await ctx.send('`Git` response: ```diff\n{}\n{}```'.format(stdout, stderr))
 
+    @commands.group(invoke_without_command=True)
+    @commands.is_owner()
+    async def reload(self, ctx, *, cog=''):
+        """Reloads an extension"""
+        try:
+            ctx.bot.unload_extension(cog)
+            ctx.bot.load_extension(cog)
+        except Exception as e:
+            await ctx.send('Failed to load: `{}`\n```py\n{}\n```'.format(cog, e))
+        else:
+            await ctx.send('Reloaded cog {} successfully'.format(cog))
+
 
 def setup(bot):
     bot.remove_command('help')
