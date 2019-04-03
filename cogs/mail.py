@@ -24,6 +24,7 @@ class Mail:
             return await ctx.send("Oops, I can't find the mailbox")
 
         await self.send_message(channel, message, ctx.message.attachments)
+        await ctx.send("Message sent.")        
 
     @commands.command()
     @commands.check(lambda ctx: ctx.channel.id==MAILBOX)
@@ -33,6 +34,7 @@ class Mail:
         message += mail
 
         await self.send_message(user, message, ctx.message.attachments)
+        await ctx.send("Message sent")
 
     async def send_message(self, dest, message, files):
         limit = 2000
