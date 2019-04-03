@@ -14,6 +14,7 @@ class Core:
         if command is None:
             message = "**List of commands**\n\n"
             for name in self.bot.cogs:
+                if hasattr(self.bot.cogs[name], '_hidden'): continue
                 message += f"*{name}*\n"
                 for cmd in sorted(self.bot.get_cog_commands(name), key=lambda c:c.name):
                     if cmd.hidden : continue
@@ -50,7 +51,7 @@ class Core:
             await ctx.message.add_reaction('📬')
         except Exception: pass
 
-    @commands.command()
+    @commands.command(hidden=True)
     @commands.has_permissions(manage_guild=True)
     async def blacklist(self, ctx, user: discord.Member):
         """Blacklist a user"""
@@ -60,10 +61,10 @@ class Core:
         self.bot.blacklist.append(user.id)
         return await ctx.send(f"{user} has been blacklisted")
 
-    @commands.command()
+    @commands.command(hidden=True)
     @commands.has_permissions(manage_guild=True)
     async def unblacklist(self, ctx, user: discord.Member):
-        """Blacklist a user"""
+        """Unblacklist a user"""
         if user.id not in self.bot.blacklist:
             return await ctx.send(f"{user} is not blacklisted!")
 
@@ -77,7 +78,7 @@ class Core:
             for uid in self.bot.blacklist:
                 listfile.write(str(uid)+'\n')
 
-    @commands.command(aliases=['git_pull'])
+    @commands.command(hidden=True)
     @commands.is_owner()
     async def update(self, ctx):
         """Updates the bot from git"""
@@ -94,7 +95,7 @@ class Core:
 
         await ctx.send('`Git` response: ```diff\n{}\n{}```'.format(stdout, stderr))
 
-    @commands.group(invoke_without_command=True)
+    @commands.command(hidden=True)
     @commands.is_owner()
     async def reload(self, ctx, *, cog=''):
         """Reloads an extension"""

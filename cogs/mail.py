@@ -5,6 +5,7 @@ MAILBOX = 562757075537756171
 #MAILBOX = 482598997966585866
 
 class Mail:
+
     def __init__(self, bot):
         self.bot = bot
 
@@ -43,7 +44,7 @@ class Mail:
         )
         await ctx.send("Message sent.")
 
-    @commands.command()
+    @commands.command(hidden=True)
     @commands.check(lambda ctx: isinstance(ctx.channel, discord.DMChannel))
     async def mail(self, ctx, *, message):
         """Submit miscellaneous mail.
