@@ -1,8 +1,6 @@
 import discord
 from discord.ext import commands
 
-from io import BytesIO
-
 MAILBOX = 562757075537756171
 #MAILBOX = 482598997966585866
 
