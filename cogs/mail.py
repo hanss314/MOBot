@@ -3,8 +3,8 @@ from discord.ext import commands
 
 from io import BytesIO
 
-MAILBOX = 562757075537756171
-#MAILBOX = 482598997966585866
+#MAILBOX = 562757075537756171
+MAILBOX = 482598997966585866
 
 class Mail:
     def __init__(self, bot):
@@ -12,49 +12,77 @@ class Mail:
 
     @commands.command()
     @commands.check(lambda ctx:isinstance(ctx.channel, discord.DMChannel))
-    async def submit(self, ctx, *, mail):
+    async def problem(self, ctx, *, problem):
         """Submit a problem to the mailbox
         Works in DMs only.
-        Abuse this and be blacklisted
         """
-        message = f"Submission from {ctx.author}. Reply with `{ctx.author.id}`.\n\n"
-        message += mail
+        heading = f"Problem from {ctx.author}. Reply with `{ctx.author.id}`."
         channel = self.bot.get_channel(MAILBOX)
         if channel is None:
             return await ctx.send("Oops, I can't find the mailbox")
 
-        await self.send_message(channel, message, ctx.message.attachments)
-        await ctx.send("Message sent.")        
+        await self.send_embed(
+            channel, discord.Color.from_rgb(200, 20, 10),
+            heading, problem, ctx.message.attachments
+        )
+        await ctx.send("Message sent.")
+
+    @commands.command()
+    @commands.check(lambda ctx:isinstance(ctx.channel, discord.DMChannel))
+    async def solution(self, ctx, problem, *, solution):
+        """Submit a solution.
+        Please specify the problem number
+        Works in DMs only.
+        """
+        heading = f"Solution from {ctx.author}. Reply with `{ctx.author.id}`."
+        channel = self.bot.get_channel(MAILBOX)
+        if channel is None:
+            return await ctx.send("Oops, I can't find the mailbox")
+
+        await self.send_embed(
+            channel, discord.Color.from_rgb(10, 200, 10),
+            heading, solution, ctx.message.attachments, f"Problem {problem}"
+        )
+        await ctx.send("Message sent.")
+
+    @commands.command()
+    @commands.check(lambda ctx: isinstance(ctx.channel, discord.DMChannel))
+    async def mail(self, ctx, *, message):
+        """Submit miscellaneous mail.
+        Works in DMs only.
+        """
+        heading = f"Message from {ctx.author}. Reply with `{ctx.author.id}`."
+        channel = self.bot.get_channel(MAILBOX)
+        if channel is None:
+            return await ctx.send("Oops, I can't find the mailbox")
+
+        await self.send_embed(
+            channel, discord.Color.from_rgb(10, 200, 10),
+            heading, message, ctx.message.attachments
+        )
+        await ctx.send("Message sent.")
+
 
     @commands.command()
     @commands.check(lambda ctx: ctx.channel.id==MAILBOX)
     async def reply(self, ctx, user: discord.User, *, mail):
         """Reply to a user"""
-        message = f"Reply from curators\n\n"
-        message += mail
+        heading = f"Reply from {ctx.author} via Mathematical Olympiads\n\n"
+        await self.send_embed(
+            user, discord.Color.from_rgb(100, 200, 200),
+            heading, mail, ctx.message.attachments
+        )
+        await ctx.send(f"Message sent to {user}")
 
-        await self.send_message(user, message, ctx.message.attachments)
-        await ctx.send("Message sent")
+    async def send_embed(self, dest, color, heading, message, files, text=''):
+        embed = discord.Embed()
+        embed.title = heading
+        embed.description = message
+        embed.color = color
+        if files:
+            embed.set_image(url=files[0].proxy_url)
 
-    async def send_message(self, dest, message, files):
-        limit = 2000
-        if len(message) > limit:
-            messages = (message[:limit-200], message[limit:] + "\n\n*Yeah screw message splitting.*")
-        else:
-            messages = (message,)
-
-
-        if len(messages) > 1:
-            await dest.send(messages[0])
-
-        attachments = []
-        for attachment in files:
-            f = BytesIO()
-            await attachment.save(f)
-            attachments.append((f, attachment.filename))
-
-        attachments = [discord.File(a[0], a[1]) for a in attachments]
-        await dest.send(messages[-1], files=attachments)
+        await dest.send(text, embed=embed)
 
 
 

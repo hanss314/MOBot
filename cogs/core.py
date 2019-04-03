@@ -1,3 +1,6 @@
+import asyncio
+import subprocess
+
 import discord
 from discord.ext import commands
 
@@ -10,17 +13,17 @@ class Core:
         """Get a list of commands or help on a particular command"""
         if command is None:
             message = "**List of commands**\n\n"
-            for cmd in sorted(self.bot.all_commands.values(), key=lambda c:c.name):
-                if cmd.hidden : continue
-                try:
-                    if not (await cmd.can_run(ctx)): continue
-                except commands.CheckFailure: continue
+            for name in self.bot.cogs:
+                message += f"*{name}*\n"
+                for cmd in sorted(self.bot.get_cog_commands(name), key=lambda c:c.name):
+                    if cmd.hidden : continue
+                    brief = cmd.brief
+                    if brief is None and cmd.help is not None:
+                        brief = cmd.help.split('\n')[0]
 
-                brief = cmd.brief
-                if brief is None and cmd.help is not None:
-                    brief = cmd.help.split('\n')[0]
+                    message += f"`{ctx.prefix}{cmd.name}` - {brief}\n"
 
-                message += f"`{ctx.prefix}{cmd.name}` - {brief}\n"
+                message += '\n'
 
         else:
             command = command.lstrip(ctx.prefix).lower()
@@ -73,6 +76,23 @@ class Core:
         with open(f"config/{self.bot.config['blacklist']}", 'w') as listfile:
             for uid in self.bot.blacklist:
                 listfile.write(str(uid)+'\n')
+
+    @commands.command(aliases=['git_pull'])
+    @commands.is_owner()
+    async def update(self, ctx):
+        """Updates the bot from git"""
+        await ctx.send(':radioactive: Warning! :radioactive: Warning! :radioactive: Pulling from git!')
+
+        process = await asyncio.create_subprocess_exec(
+            'git', 'pull', stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        )
+        stdout, stderr = await process.communicate()
+        stdout = stdout.decode().splitlines()
+        stdout = '\n'.join('+ ' + i for i in stdout)
+        stderr = stderr.decode().splitlines()
+        stderr = '\n'.join('- ' + i for i in stderr)
+
+        await ctx.send('`Git` response: ```diff\n{}\n{}```'.format(stdout, stderr))
 
 
 def setup(bot):

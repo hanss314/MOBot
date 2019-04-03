@@ -82,7 +82,7 @@ class MOBot(commands.Bot):
             return
 
         if isinstance(exception, commands.CheckFailure):
-            raise exception
+            await ctx.send("No.", delete_after=10)
         elif isinstance(exception, commands.CommandOnCooldown):
             exception: commands.CommandOnCooldown
             await ctx.send(f'You\'re going to fast! Try again in {exception.retry_after:.2f} seconds.')
