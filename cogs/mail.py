@@ -57,7 +57,7 @@ class Mail:
             return await ctx.send("Oops, I can't find the mailbox")
 
         await self.send_embed(
-            channel, discord.Color.from_rgb(10, 200, 10),
+            channel, discord.Color.from_rgb(200, 200, 200),
             heading, message, ctx.message.attachments
         )
         await ctx.send("Message sent.")
