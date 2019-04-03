@@ -3,8 +3,8 @@ from discord.ext import commands
 
 from io import BytesIO
 
-#MAILBOX = 562757075537756171
-MAILBOX = 482598997966585866
+MAILBOX = 562757075537756171
+#MAILBOX = 482598997966585866
 
 class Mail:
     def __init__(self, bot):
