@@ -1,0 +1,6 @@
+token: token.txt
+blacklist: blacklist.txt
+prefix: m.
+cogs:
+  - cogs.core
+  - cogs.mail
