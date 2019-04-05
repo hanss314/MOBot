@@ -4,3 +4,4 @@ prefix: m.
 cogs:
   - cogs.core
   - cogs.mail
+  - cogs.moderation
