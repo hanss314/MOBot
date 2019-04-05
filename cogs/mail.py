@@ -44,7 +44,7 @@ class Mail:
         )
         await ctx.send("Message sent.")
 
-    @commands.command(hidden=True)
+    @commands.command()
     @commands.check(lambda ctx: isinstance(ctx.channel, discord.DMChannel))
     async def mail(self, ctx, *, message):
         """Submit miscellaneous mail.
@@ -62,7 +62,7 @@ class Mail:
         await ctx.send("Message sent.")
 
 
-    @commands.command()
+    @commands.command(hidden=True)
     @commands.check(lambda ctx: ctx.channel.id==MAILBOX)
     async def reply(self, ctx, user: discord.User, *, mail):
         """Reply to a user"""
