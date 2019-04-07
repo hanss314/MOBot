@@ -4,7 +4,8 @@ import discord
 LOGCHAN = 559964001724006400
 NEWROLE = 563815296822149142
 MOGUILD = 533153217119387658
-JOINMES = 123456789012345678
+JOINMES = 564580597352103943
+JOINREC = 564272059610431508
 
 class Moderation:
     def __init__(self, bot):
@@ -45,7 +46,7 @@ class Moderation:
             await self.send(msg)
 
     async def on_raw_reaction_add(self, payload):
-        if payload.message_id != JOINMES: return
+        if payload.message_id != JOINMES or payload.emoji.id != JOINREC: return
         guild = self.bot.get_guild(MOGUILD)
         user = guild.get_member(payload.user_id)
         if user is not None and payload.emoji:
