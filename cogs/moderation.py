@@ -78,8 +78,8 @@ class Moderation:
         if user is not None and payload.emoji:
             try:
                 await user.remove_roles(guild.get_role(NEWROLE))
-            except discord.HTTPException:
-                pass
+            except discord.HTTPException as e:
+                print(e)
 
     async def on_raw_reaction_remove(self, payload):
         print(payload.message_id, payload.emoji.id)
@@ -89,8 +89,8 @@ class Moderation:
         if user is not None and payload.emoji:
             try:
                 await user.add_roles(guild.get_role(NEWROLE))
-            except discord.HTTPException:
-                pass
+            except discord.HTTPException as e:
+                print(e)
 
     async def send(self, message):
         channel = self.bot.get_channel(LOGCHAN)
