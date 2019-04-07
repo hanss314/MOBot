@@ -71,7 +71,6 @@ class Moderation:
         await channel.send(embed=embed)
 
     async def on_raw_reaction_add(self, payload):
-        print(payload.message_id, payload.emoji.id)
         if payload.message_id != JOINMES or payload.emoji.id != JOINREC: return
         guild = self.bot.get_guild(MOGUILD)
         user = guild.get_member(payload.user_id)
@@ -82,7 +81,6 @@ class Moderation:
                 print(e)
 
     async def on_raw_reaction_remove(self, payload):
-        print(payload.message_id, payload.emoji.id)
         if payload.message_id != JOINMES or payload.emoji.id != JOINREC: return
         guild = self.bot.get_guild(MOGUILD)
         user = guild.get_member(payload.user_id)
