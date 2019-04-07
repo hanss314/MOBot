@@ -59,28 +59,6 @@ class Moderation:
         embed.set_author(name=message.author.name, icon_url=message.author.avatar_url_as(format='png'))
         await channel.send(embed=embed)
 
-    async def on_raw_reaction_add(self, payload):
-        print(payload.message.id, payload.emoji.id)
-        if payload.message_id != JOINMES or payload.emoji.id != JOINREC: return
-        guild = self.bot.get_guild(MOGUILD)
-        user = guild.get_member(payload.user_id)
-        if user is not None and payload.emoji:
-            try:
-                await user.remove_roles(guild.get_role(NEWROLE))
-            except discord.HTTPException:
-                pass
-
-    async def on_raw_reaction_remove(self, payload):
-        print(payload.message.id, payload.emoji.id)
-        if payload.message_id != JOINMES or payload.emoji.id != JOINREC: return
-        guild = self.bot.get_guild(MOGUILD)
-        user = guild.get_member(payload.user_id)
-        if user is not None and payload.emoji:
-            try:
-                await user.add_roles(guild.get_role(NEWROLE))
-            except discord.HTTPException:
-                pass
-
     async def on_message_delete(self, message):
         if message.guild is None or message.guild.id != MOGUILD: return
         channel = message.guild.get_channel(LOGCHAN)
@@ -91,6 +69,28 @@ class Moderation:
                               timestamp=message.created_at)
         embed.set_author(name=message.author.name, icon_url=message.author.avatar_url_as(format='png'))
         await channel.send(embed=embed)
+
+    async def on_raw_reaction_add(self, payload):
+        print(payload.message_id, payload.emoji.id)
+        if payload.message_id != JOINMES or payload.emoji.id != JOINREC: return
+        guild = self.bot.get_guild(MOGUILD)
+        user = guild.get_member(payload.user_id)
+        if user is not None and payload.emoji:
+            try:
+                await user.remove_roles(guild.get_role(NEWROLE))
+            except discord.HTTPException:
+                pass
+
+    async def on_raw_reaction_remove(self, payload):
+        print(payload.message_id, payload.emoji.id)
+        if payload.message_id != JOINMES or payload.emoji.id != JOINREC: return
+        guild = self.bot.get_guild(MOGUILD)
+        user = guild.get_member(payload.user_id)
+        if user is not None and payload.emoji:
+            try:
+                await user.add_roles(guild.get_role(NEWROLE))
+            except discord.HTTPException:
+                pass
 
     async def send(self, message):
         channel = self.bot.get_channel(LOGCHAN)
