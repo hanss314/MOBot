@@ -6,6 +6,7 @@ NEWROLE = 563807131275493443
 MOGUILD = 533153217119387658
 JOINMES = 564580597352103943
 JOINREC = 564272059610431508
+JOINCHA = 533156814145978390
 
 class Moderation:
     def __init__(self, bot):
@@ -30,6 +31,11 @@ class Moderation:
         if member.guild.id != MOGUILD: return
         msg = f':x: {member.mention} (`{member}`) left the server.'
         await self.send(msg)
+
+        channel = self.bot.get_channel(JOINCHA)
+        message = await channel.get_message(JOINMES)
+        emoji = await self.bot.get_guild(MOGUILD).get_emoji(JOINREC)
+        await message.remove_reaction(emoji, member)
 
     async def on_member_update(self, before, after):
         if before.guild.id != MOGUILD: return
