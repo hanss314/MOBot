@@ -35,10 +35,7 @@ class Moderation:
 
         channel = self.bot.get_channel(JOINCHA)
         message = await channel.get_message(JOINMES)
-        try:
-            await message.remove_reaction(RECNAME, member)
-        except Exception as e:
-            print(e)
+        await message.remove_reaction(RECNAME, member)
 
     async def on_member_update(self, before, after):
         if before.guild.id != MOGUILD: return
