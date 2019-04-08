@@ -7,6 +7,7 @@ MOGUILD = 533153217119387658
 JOINMES = 564580597352103943
 JOINREC = 564272059610431508
 JOINCHA = 533156814145978390
+RECNAME = "check"
 
 class Moderation:
     def __init__(self, bot):
@@ -34,8 +35,7 @@ class Moderation:
 
         channel = self.bot.get_channel(JOINCHA)
         message = await channel.get_message(JOINMES)
-        emoji = await self.bot.get_guild(MOGUILD).get_emoji(JOINREC)
-        await message.remove_reaction(emoji, member)
+        await message.remove_reaction(RECNAME, member)
 
     async def on_member_update(self, before, after):
         if before.guild.id != MOGUILD: return
