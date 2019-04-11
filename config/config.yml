@@ -5,3 +5,4 @@ cogs:
   - cogs.core
   - cogs.mail
   - cogs.moderation
+  - cogs.roles

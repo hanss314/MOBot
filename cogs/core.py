@@ -16,16 +16,18 @@ class Core:
             message = "**List of commands**\n\n"
             for name in self.bot.cogs:
                 if hasattr(self.bot.cogs[name], '_hidden'): continue
-                message += f"*{name}*\n"
+                cog = f"*{name}*\n"
+                commands = ''
                 for cmd in sorted(self.bot.get_cog_commands(name), key=lambda c:c.name):
                     if cmd.hidden : continue
                     brief = cmd.brief
                     if brief is None and cmd.help is not None:
                         brief = cmd.help.split('\n')[0]
 
-                    message += f"`{ctx.prefix}{cmd.name}` - {brief}\n"
+                    commands += f"`{ctx.prefix}{cmd.name}` - {brief}\n"
 
-                message += '\n'
+                if commands:
+                    message += cog+commands+'\n'
 
         else:
             command = command.lstrip(ctx.prefix).lower()

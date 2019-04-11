@@ -52,8 +52,6 @@ class Moderation:
         except Exception as e:
             await self.send(e)
 
-
-
     async def on_member_update(self, before, after):
         if before.guild.id != MOGUILD: return
         if before.name != after.name:
