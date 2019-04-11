@@ -36,7 +36,7 @@ class Moderation:
 
     def save_joined(self):
         with open('data/joined.txt', 'w') as joinfile:
-            joinfile.write('\n'.join(self.joined))
+            joinfile.write('\n'.join(map(str, self.joined)))
 
     async def on_member_remove(self, member):
         if member.guild.id != MOGUILD: return
@@ -46,12 +46,13 @@ class Moderation:
         channel = self.bot.get_channel(JOINCHA)
         message = await channel.get_message(JOINMES)
         self.joined.discard(member.id)
+        self.save_joined()
         try:
             await message.remove_reaction(message.reactions[0], member)
         except Exception as e:
             await self.send(e)
 
-        self.save_joined()
+
 
     async def on_member_update(self, before, after):
         if before.guild.id != MOGUILD: return
