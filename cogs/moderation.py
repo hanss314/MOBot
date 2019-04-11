@@ -69,6 +69,7 @@ class Moderation:
 
     async def on_message_edit(self, old, message):
         if message.guild is None or message.guild.id != MOGUILD: return
+        if message.author.bot: return
         channel = message.guild.get_channel(LOGCHAN)
         if old.content == message.content: return
         if message.channel.id == channel.id: return
@@ -83,6 +84,7 @@ class Moderation:
 
     async def on_message_delete(self, message):
         if message.guild is None or message.guild.id != MOGUILD: return
+        if message.author.bot: return
         channel = message.guild.get_channel(LOGCHAN)
         if message.channel.id == channel.id: return
         embed = discord.Embed(title=f'Message deleted in #{message.channel.name}',
