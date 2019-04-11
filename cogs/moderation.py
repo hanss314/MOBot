@@ -8,10 +8,16 @@ JOINMES = 564580597352103943
 JOINREC = 564272059610431508
 JOINCHA = 533156814145978390
 RECNAME = "check"
+LOUNGID = 533153217119387660
 
 class Moderation:
     def __init__(self, bot):
         self.bot = bot
+        try:
+            with open('data/joined.txt', 'r') as joinfile:
+                self.joined = set(map(int, filter(lambda x: x, joinfile.read().split('\n'))))
+        except FileNotFoundError:
+            self.joined = set()
 
     async def on_member_join(self, member):
         if member.guild.id != MOGUILD: return
@@ -28,6 +34,10 @@ class Moderation:
         msg += 'User\'s account was created at ' + creation_time.strftime("%m/%d/%Y %I:%M:%S %p")
         await self.send(msg)
 
+    def save_joined(self):
+        with open('data/joined.txt', 'w') as joinfile:
+            joinfile.write('\n'.join(self.joined))
+
     async def on_member_remove(self, member):
         if member.guild.id != MOGUILD: return
         msg = f':x: {member.mention} (`{member}`) left the server.'
@@ -35,10 +45,13 @@ class Moderation:
 
         channel = self.bot.get_channel(JOINCHA)
         message = await channel.get_message(JOINMES)
+        self.joined.discard(member.id)
         try:
             await message.remove_reaction(message.reactions[0], member)
         except Exception as e:
             await self.send(e)
+
+        self.save_joined()
 
     async def on_member_update(self, before, after):
         if before.guild.id != MOGUILD: return
@@ -88,6 +101,15 @@ class Moderation:
                 await user.remove_roles(guild.get_role(NEWROLE))
             except discord.HTTPException as e:
                 print(e)
+
+            if user.id not in self.joined:
+                await self.bot.get_channel(LOUNGID).send(
+                    f"Welcome to the Mathematical Olympiad Discord server {user.mention}! "
+                    f"We hope you enjoy your time here :smile:"
+                )
+                self.joined.add(user.id)
+                self.save_joined()
+
 
     async def on_raw_reaction_remove(self, payload):
         if payload.message_id != JOINMES or payload.emoji.id != JOINREC: return
