@@ -10,7 +10,6 @@ class Roles:
 
     @commands.command(name='give-after', aliases=['give'], hidden=True)
     @commands.has_permissions(manage_roles=True)
-    @commands.bot_has_permissions(manage_roles=True)
     async def give_after(self, ctx, role: discord.Role, seconds: int,
                       *members: discord.Member):
         """Give a list of members a role in seconds amount of time"""
@@ -26,7 +25,6 @@ class Roles:
 
     @commands.command(name='remove-after', aliases=['remove'], hidden=True)
     @commands.has_permissions(manage_roles=True)
-    @commands.bot_has_permissions(manage_roles=True)
     async def remove_after(self, ctx, role: discord.Role, seconds: int,
                       *members: discord.Member):
         """Remove a role members after a specified amount of seconds"""
@@ -42,7 +40,6 @@ class Roles:
 
     @commands.command(name='apply-for', aliases=['apply'], hidden=True)
     @commands.has_permissions(manage_roles=True)
-    @commands.bot_has_permissions(manage_roles=True)
     async def apply_for(self, ctx, role: discord.Role, seconds: int,
                            *members: discord.Member):
         """Apply a role to members for a specified amount of seconds"""
