@@ -27,7 +27,7 @@ class Job:
             except discord.HTTPException:
                 pass
 
-    def __le__(self, other):
+    def __lt__(self, other):
         return self.time < other.time
 
     def __eq__(self, other):
@@ -107,7 +107,7 @@ class Roles:
         """View all role management jobs"""
         s = "**Jobs**\n"
         for n, job in enumerate(self.jobs):
-            s += f"{n+1}: {str(job)}"
+            s += f"{n+1}: {str(job)}\n"
 
         await ctx.send(s)
 
