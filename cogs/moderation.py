@@ -1,6 +1,8 @@
 import datetime
 import discord
 
+from discord.ext import commands
+
 LOGCHAN = 559964001724006400
 NEWROLE = 563807131275493443
 MOGUILD = 533153217119387658
@@ -10,7 +12,7 @@ JOINCHA = 533156814145978390
 RECNAME = "check"
 LOUNGID = 533153217119387660
 
-class Moderation:
+class Moderation(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         try:
@@ -44,7 +46,7 @@ class Moderation:
         await self.send(msg)
 
         channel = self.bot.get_channel(JOINCHA)
-        message = await channel.get_message(JOINMES)
+        message = await channel.fetch_message(JOINMES)
         self.joined.discard(member.id)
         self.save_joined()
         try:

@@ -4,7 +4,7 @@ from discord.ext import commands
 MAILBOX = 562757075537756171
 #MAILBOX = 482598997966585866
 
-class Mail:
+class Mail(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
