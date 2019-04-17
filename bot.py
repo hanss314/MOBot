@@ -28,7 +28,7 @@ class MOBot(commands.Bot):
         self.logger.info('Guilds  : {}'.format(len(self.guilds)))
         self.logger.info('Users   : {}'.format(len(set(self.get_all_members()))))
         self.logger.info('Channels: {}'.format(len(list(self.get_all_channels()))))
-        await self.set_presence('with postage stamps | {}help'.format(self.config['prefix']))
+        await self.set_presence('Type {}help for help'.format(self.config['prefix']))
 
         for cog in self.config['cogs']:
             try:
