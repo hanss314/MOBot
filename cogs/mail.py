@@ -28,7 +28,7 @@ class Mail:
 
     @commands.command()
     @commands.check(lambda ctx:isinstance(ctx.channel, discord.DMChannel))
-    async def solution(self, ctx, problem, *, solution):
+    async def solution(self, ctx, problem: int, *, solution):
         """Submit a solution.
         Please specify the problem number
         Works in DMs only.
