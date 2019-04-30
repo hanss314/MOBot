@@ -129,4 +129,4 @@ class Moderation:
 
 
 def setup(bot):
-    bot.iadd_cog(Moderation(bot))
+    bot.add_cog(Moderation(bot))
