@@ -70,7 +70,7 @@ class Roles:
             await self.check_loop()
 
     @commands.command(name='give-after', aliases=['give'], hidden=True)
-    @commands.has_role(558563826891751425)
+    @commands.has_role('Staff')
     async def give_after(self, ctx, role: discord.Role, seconds: int,
                       *members: discord.Member):
         """Give a list of members a role in seconds amount of time"""
@@ -80,7 +80,7 @@ class Roles:
         await self.start_loop()
 
     @commands.command(name='remove-after', aliases=['remove'], hidden=True)
-    @commands.has_role(558563826891751425)
+    @commands.has_role('Staff')
     async def remove_after(self, ctx, role: discord.Role, seconds: int,
                       *members: discord.Member):
         """Remove a role members after a specified amount of seconds"""
@@ -90,7 +90,7 @@ class Roles:
         await self.start_loop()
 
     @commands.command(name='apply-for', aliases=['apply'], hidden=True)
-    @commands.has_role(558563826891751425)
+    @commands.has_role('Staff')
     async def apply_for(self, ctx, role: discord.Role, seconds: int,
                            *members: discord.Member):
         """Apply a role to members for a specified amount of seconds"""
@@ -102,7 +102,7 @@ class Roles:
         await self.start_loop()
 
     @commands.command(name='jobs', hidden=True)
-    @commands.has_role(558563826891751425)
+    @commands.has_role('Staff')
     async def view_jobs(self, ctx):
         """View all role management jobs"""
         s = "**Jobs**\n"
@@ -112,7 +112,7 @@ class Roles:
         await ctx.send(s)
 
     @commands.command(name="remove-job", aliases=['remjob'], hidden=True)
-    @commands.has_role(558563826891751425)
+    @commands.has_role('Staff')
     async def remove_job(self, ctx, job: int):
         """Remove a job. See all jobs with `m.jobs`"""
         if 0 < job <= len(self.jobs):
