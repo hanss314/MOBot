@@ -88,7 +88,9 @@ class MOBot(commands.Bot):
             await ctx.send(f'You\'re going to fast! Try again in {exception.retry_after:.2f} seconds.')
 
         elif isinstance(exception, commands.CommandNotFound):
-            pass
+            if isinstance(ctx.channel, discord.DMChannel):
+                await ctx.send("Command not recognised, please type `m.help` for help.")
+
         elif isinstance(exception, commands.UserInputError):
             error = ' '.join(exception.args)
             error_data = re.findall('Converting to \"(.*)\" failed for parameter \"(.*)\"\.', error)
