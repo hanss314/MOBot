@@ -26,6 +26,7 @@ class Mail:
             )
             await c.send("Message sent.")
         elif message.channel.id == MAILBOX:
+            if message.content.startswith('m.'): return
             m = message
             heading = f"Message from {m.author} via Mathematical Olympiads\n\n"
             users = []
