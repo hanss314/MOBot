@@ -29,6 +29,8 @@ class Core:
                 if commands:
                     message += cog+commands+'\n'
 
+            message += 'DM me a message to send a message to the staff\n'
+
         else:
             command = command.lstrip(ctx.prefix).lower()
             if command not in self.bot.all_commands:

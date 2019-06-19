@@ -9,6 +9,39 @@ class Mail:
     def __init__(self, bot):
         self.bot = bot
 
+    async def on_message(self, message):
+        if message.author.bot: return
+        if message.guild is None:
+            if message.content.startswith('m.'): return
+            m = message
+            c = message.channel
+            heading = f"Message from {m.author}. Reply with `{m.author.id}`."
+            channel = self.bot.get_channel(MAILBOX)
+            if channel is None:
+                return await channel.send("Oops, I can't find the mailbox")
+
+            await self.send_embed(
+                channel, discord.Color.from_rgb(200, 200, 200),
+                heading, message.content, message.attachments
+            )
+            await c.send("Message sent.")
+        elif message.channel.id == MAILBOX:
+            m = message
+            heading = f"Message from {m.author} via Mathematical Olympiads\n\n"
+            users = []
+            for user in message.mentions:
+                if m.channel.permissions_for(user).read_messages: continue
+                if user.bot: continue
+                users.append(user)
+                await self.send_embed(
+                    user, discord.Color.from_rgb(100, 200, 200),
+                    heading, m.content, m.attachments
+                )
+
+            if users:
+                await m.channel.send(f"Message sent to {', '.join(map(str, users))}")
+
+
     @commands.command()
     @commands.check(lambda ctx:isinstance(ctx.channel, discord.DMChannel))
     async def problem(self, ctx, *, problem):
