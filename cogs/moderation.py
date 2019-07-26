@@ -55,7 +55,7 @@ class Moderation:
     async def on_member_update(self, before, after):
         if before.guild.id != MOGUILD: return
         if before.name != after.name:
-            msg = f'User **{before}** changed their name to **{after}** ({after.mention})'
+            msg = f'`{before.id}`  User **{before}** changed their name to **{after}** ({after.mention})'
             if before.discriminator != after.discriminator:
                 msg += '\n:repeat: *User\'s discriminator changed!*'
 
