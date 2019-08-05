@@ -106,8 +106,8 @@ class Moderation:
             if user.id not in self.joined:
                 await self.bot.get_channel(LOUNGID).send(
                     f"Welcome to the Mathematical Olympiads Discord server {user.mention}! " 
-                    "Check out the self-assignable roles under **roles** in "
-                    "<#533156814145978390> and enjoy your time here. :smile:"
+                    "Check out the self-assignable roles in "
+                    "<#607947882963796061> and enjoy your time here. :smile:"
                 )
                 self.joined.add(user.id)
                 self.save_joined()
