@@ -44,7 +44,7 @@ class Mail:
 
 
     @commands.command()
-    @commands.check(lambda ctx:isinstance(ctx.channel, discord.DMChannel))
+    @commands.check(lambda ctx: isinstance(ctx.channel, discord.DMChannel))
     async def problem(self, ctx, *, problem):
         """Submit a problem to the mailbox
         Works in DMs only.

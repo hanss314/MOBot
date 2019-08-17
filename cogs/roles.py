@@ -3,6 +3,7 @@ import discord
 import time
 import bisect
 
+from typing import Union
 from discord.ext import commands
 
 class Job:
@@ -72,8 +73,22 @@ class Roles:
     @commands.command(name='give-after', aliases=['give'], hidden=True)
     @commands.has_role('Staff')
     async def give_after(self, ctx, role: discord.Role, seconds: int,
-                      *members: discord.Member):
+                      *members: Union[discord.Member, discord.Role]):
         """Give a list of members a role in seconds amount of time"""
+        membs, roles = [], []
+        for mem in members:
+            if isinstance(mem, discord.Member): membs.append(mem)
+            else: roles.append(mem)
+
+        for mem in ctx.guild.members:
+            if mem in membs: continue
+            for r in roles:
+                if r in mem.roles:
+                    membs.append(mem)
+                    break
+
+        members = membs
+
         job = Job(ctx, role, time.time()+seconds, members, True)
         bisect.insort(self.jobs, job)
         await ctx.send("Job enqueued. Use `m.jobs` to see all jobs")
@@ -82,8 +97,24 @@ class Roles:
     @commands.command(name='remove-after', aliases=['remove'], hidden=True)
     @commands.has_role('Staff')
     async def remove_after(self, ctx, role: discord.Role, seconds: int,
-                      *members: discord.Member):
+                      *members: Union[discord.Member, discord.Role]):
         """Remove a role members after a specified amount of seconds"""
+        membs, roles = [], []
+        for mem in members:
+            if isinstance(mem, discord.Member):
+                membs.append(mem)
+            else:
+                roles.append(mem)
+
+        for mem in ctx.guild.members:
+            if mem in membs: continue
+            for r in roles:
+                if r in mem.roles:
+                    membs.append(mem)
+                    break
+
+        members = membs
+
         job = Job(ctx, role, time.time() + seconds, members, False)
         bisect.insort(self.jobs, job)
         await ctx.send("Job enqueued. Use `m.jobs` to see all jobs")
@@ -92,8 +123,24 @@ class Roles:
     @commands.command(name='apply-for', aliases=['apply'], hidden=True)
     @commands.has_role('Staff')
     async def apply_for(self, ctx, role: discord.Role, seconds: int,
-                           *members: discord.Member):
+                           *members: Union[discord.Member, discord.Role]):
         """Apply a role to members for a specified amount of seconds"""
+        membs, roles = [], []
+        for mem in members:
+            if isinstance(mem, discord.Member):
+                membs.append(mem)
+            else:
+                roles.append(mem)
+
+        for mem in ctx.guild.members:
+            if mem in membs: continue
+            for r in roles:
+                if r in mem.roles:
+                    membs.append(mem)
+                    break
+
+        members = membs
+
         job = Job(ctx, role, time.time(), members, True)
         await job.run()
         job = Job(ctx, role, time.time() + seconds, members, False)
