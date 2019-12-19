@@ -28,7 +28,7 @@ class Mail:
         elif message.channel.id == MAILBOX:
             if message.content.startswith('m.'): return
             m = message
-            heading = f"Message from {m.author} via Mathematical Olympiads\n\n"
+            heading = "Message from the Mathematical Olympiads Server Staff Team"
             users = []
             for user in message.mentions:
                 if m.channel.permissions_for(user).read_messages: continue
