@@ -100,7 +100,7 @@ class Mail:
     @commands.check(lambda ctx: ctx.channel.id==MAILBOX)
     async def reply(self, ctx, user: discord.User, *, mail):
         """Reply to a user"""
-        heading = f"Reply from {ctx.author} via Mathematical Olympiads\n\n"
+        heading = "Message from the Mathematical Olympiads Server Staff Team"
         await self.send_embed(
             user, discord.Color.from_rgb(100, 200, 200),
             heading, mail, ctx.message.attachments
