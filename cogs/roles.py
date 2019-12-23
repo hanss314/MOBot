@@ -5,6 +5,7 @@ import bisect
 
 from typing import Union
 from discord.ext import commands
+Cog = commands.Cog
 
 class Job:
     def __init__(self, ctx, role, time, members, add):
@@ -48,7 +49,7 @@ class Job:
         return s
 
 
-class Roles:
+class Roles(Cog):
     def __init__(self, bot):
         self.bot = bot
         self.jobs = []

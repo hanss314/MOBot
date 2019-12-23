@@ -4,8 +4,9 @@ import inspect
 
 import discord
 from discord.ext import commands
+Cog = commands.Cog
 
-class Core:
+class Core(Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -105,8 +106,7 @@ class Core:
     async def reload(self, ctx, *, cog=''):
         """Reloads an extension"""
         try:
-            ctx.bot.unload_extension(cog)
-            ctx.bot.load_extension(cog)
+            ctx.bot.reload_extension(cog)
         except Exception as e:
             await ctx.send('Failed to load: `{}`\n```py\n{}\n```'.format(cog, e))
         else:

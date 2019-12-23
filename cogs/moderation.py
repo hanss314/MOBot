@@ -1,5 +1,7 @@
 import datetime
 import discord
+from discord.ext import commands
+Cog = commands.Cog
 
 LOGCHAN = 559964001724006400
 NEWROLE = 563807131275493443
@@ -10,7 +12,7 @@ JOINCHA = 533156814145978390
 RECNAME = "check"
 LOUNGID = 533153217119387660
 
-class Moderation:
+class Moderation(Cog):
     def __init__(self, bot):
         self.bot = bot
         try:
@@ -19,6 +21,7 @@ class Moderation:
         except FileNotFoundError:
             self.joined = set()
 
+    @Cog.listener()
     async def on_member_join(self, member):
         if member.guild.id != MOGUILD: return
         await member.add_roles(self.bot.get_guild(MOGUILD).get_role(NEWROLE))
@@ -38,6 +41,7 @@ class Moderation:
         with open('data/joined.txt', 'w') as joinfile:
             joinfile.write('\n'.join(map(str, self.joined)))
 
+    @Cog.listener()
     async def on_member_remove(self, member):
         if member.guild.id != MOGUILD: return
         msg = f':x: {member.mention} (`{member}`) left the server.'
@@ -52,6 +56,7 @@ class Moderation:
         except Exception as e:
             await self.send(e)
 
+    @Cog.listener()
     async def on_member_update(self, before, after):
         if before.guild.id != MOGUILD: return
         if before.name != after.name:
@@ -66,6 +71,7 @@ class Moderation:
                   f'{before.discriminator} to {after.discriminator}'
             await self.send(msg)
 
+    @Cog.listener()
     async def on_message_edit(self, old, message):
         if message.guild is None or message.guild.id != MOGUILD: return
         if message.author.bot: return
@@ -81,6 +87,7 @@ class Moderation:
         embed.set_author(name=message.author.name, icon_url=message.author.avatar_url_as(format='png'))
         await channel.send(embed=embed)
 
+    @Cog.listener()
     async def on_message_delete(self, message):
         if message.guild is None or message.guild.id != MOGUILD: return
         if message.author.bot: return
@@ -93,6 +100,7 @@ class Moderation:
         embed.set_author(name=message.author.name, icon_url=message.author.avatar_url_as(format='png'))
         await channel.send(embed=embed)
 
+    @Cog.listener()
     async def on_raw_reaction_add(self, payload):
         if payload.message_id != JOINMES or payload.emoji.id != JOINREC: return
         guild = self.bot.get_guild(MOGUILD)
@@ -112,7 +120,7 @@ class Moderation:
                 self.joined.add(user.id)
                 self.save_joined()
 
-
+    @Cog.listener()
     async def on_raw_reaction_remove(self, payload):
         if payload.message_id != JOINMES or payload.emoji.id != JOINREC: return
         guild = self.bot.get_guild(MOGUILD)

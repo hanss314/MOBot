@@ -1,14 +1,16 @@
 import discord
 from discord.ext import commands
+Cog = commands.Cog
 
 MAILBOX = 562757075537756171
 #MAILBOX = 482598997966585866
 
-class Mail:
+class Mail(Cog):
 
     def __init__(self, bot):
         self.bot = bot
 
+    @Cog.listener()
     async def on_message(self, message):
         if message.author.bot: return
         if message.guild is None:
