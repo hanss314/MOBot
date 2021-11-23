@@ -28,7 +28,7 @@ class Mail(Cog):
             )
             await c.send("Message sent.")
         elif message.channel.id == MAILBOX:
-            if message.content.startswith('m.'): return
+            if not message.content.lower().startswith('r '): return
             m = message
             heading = "Message from the Mathematical Olympiads Server Staff Team"
             try:
@@ -42,7 +42,7 @@ class Mail(Cog):
             if user.bot: return
             await self.send_embed(
                 user, discord.Color.from_rgb(100, 200, 200),
-                heading, m.content, m.attachments
+                heading, m.content[2:], m.attachments
             )
             await m.channel.send(f"Message sent to {user.mention} ({user_id})")
 
