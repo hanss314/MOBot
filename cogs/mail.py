@@ -17,7 +17,7 @@ class Mail(Cog):
             if message.content.startswith('m.'): return
             m = message
             c = message.channel
-            heading = f"Message from {m.author}. Reply with `{m.author.id}`."
+            heading = f"Message from {m.author} (`{m.author.id}`)."
             channel = self.bot.get_channel(MAILBOX)
             if channel is None:
                 return await channel.send("Oops, I can't find the mailbox")
@@ -31,18 +31,20 @@ class Mail(Cog):
             if message.content.startswith('m.'): return
             m = message
             heading = "Message from the Mathematical Olympiads Server Staff Team"
-            users = []
-            for user in message.mentions:
-                if m.channel.permissions_for(user).read_messages: continue
-                if user.bot: continue
-                users.append(user)
-                await self.send_embed(
-                    user, discord.Color.from_rgb(100, 200, 200),
-                    heading, m.content, m.attachments
-                )
-
-            if users:
-                await m.channel.send(f"Message sent to {', '.join(map(str, users))}")
+            try:
+                referenced = await m.channel.fetch_message(m.reference.message_id)
+                if referenced.author != self.bot.user:
+                    return
+                user_id = referenced.embeds[0].title.split('`')[-2]
+                user = await self.bot.fetch_user(user_id)
+            except Exception:
+                return
+            if user.bot: return
+            await self.send_embed(
+                user, discord.Color.from_rgb(100, 200, 200),
+                heading, m.content, m.attachments
+            )
+            await m.channel.send(f"Message sent to {user.mention} ({user_id})")
 
 
     @commands.command()
@@ -51,7 +53,7 @@ class Mail(Cog):
         """Submit a problem to the mailbox
         Works in DMs only.
         """
-        heading = f"Problem from {ctx.author}. Reply with `{ctx.author.id}`."
+        heading = f"Problem from {ctx.author} (`{ctx.author.id}`)."
         channel = self.bot.get_channel(MAILBOX)
         if channel is None:
             return await ctx.send("Oops, I can't find the mailbox")
@@ -69,7 +71,7 @@ class Mail(Cog):
         Please specify the problem number
         Works in DMs only.
         """
-        heading = f"Solution from {ctx.author}. Reply with `{ctx.author.id}`."
+        heading = f"Solution from {ctx.author} (`{ctx.author.id}`)."
         channel = self.bot.get_channel(MAILBOX)
         if channel is None:
             return await ctx.send("Oops, I can't find the mailbox")
@@ -86,7 +88,7 @@ class Mail(Cog):
         """Submit miscellaneous mail.
         Works in DMs only.
         """
-        heading = f"Message from {ctx.author}. Reply with `{ctx.author.id}`."
+        heading = f"Message from {ctx.author} (`{ctx.author.id}`)."
         channel = self.bot.get_channel(MAILBOX)
         if channel is None:
             return await ctx.send("Oops, I can't find the mailbox")
